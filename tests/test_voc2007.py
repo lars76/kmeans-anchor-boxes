@@ -32,7 +32,6 @@ class TestVoc2007(TestCase):
         dataset = self.__load_dataset()
         out = kmeans(dataset, 5, iterations=50)
         percentage = avg_iou(dataset, out)
-        print(percentage)
 
         np.testing.assert_almost_equal(percentage, 0.61, decimal=2)
 
@@ -40,6 +39,5 @@ class TestVoc2007(TestCase):
         dataset = self.__load_dataset()
         out = kmeans(dataset, 9, iterations=50)
         percentage = avg_iou(dataset, out)
-        print(percentage)
 
         np.testing.assert_almost_equal(percentage, 0.672, decimal=2)
