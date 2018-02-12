@@ -45,41 +45,34 @@ def translate_boxes(boxes):
     return np.delete(boxes, [0, 1], axis=1)
 
 
-def kmeans(boxes, k, iterations=10):
+def kmeans(boxes, k, dist=np.median):
     """
     Calculates k-means clustering with the Intersection over Union (IoU) metric.
     :param boxes: numpy array of shape (r, 2), where r is the number of rows
     :param k: number of clusters
-    :param iterations: number of iterations
+    :param dist: distance function
     :return: numpy array of shape (k, 2)
     """
     rows = boxes.shape[0]
 
     distances = np.empty((rows, k))
+    last_clusters = np.zeros((rows,))
 
-    result = [0.0, None]
-    for i in range(0, iterations):
-        # the Forgy method will fail if the whole array contains the same rows
-        clusters = boxes[np.random.choice(rows, k, replace=False)]
+    # the Forgy method will fail if the whole array contains the same rows
+    clusters = boxes[np.random.choice(rows, k, replace=False)]
 
-        tmp = [0.0, clusters]
-        while True:
-            for row in range(rows):
-                distances[row] = 1 - iou(boxes[row], clusters)
+    while True:
+        for row in range(rows):
+            distances[row] = 1 - iou(boxes[row], clusters)
 
-            nearest_clusters = np.argmin(distances, axis=1)
+        nearest_clusters = np.argmin(distances, axis=1)
 
-            for cluster in range(k):
-                clusters[cluster] = np.mean(boxes[nearest_clusters == cluster], axis=0)
+        if (last_clusters == nearest_clusters).all():
+            break
 
-            # improve this
-            avg = avg_iou(boxes, clusters)
-            if avg > tmp[0]:
-                tmp = [avg, clusters]
-            else:
-                break
+        for cluster in range(k):
+            clusters[cluster] = dist(boxes[nearest_clusters == cluster], axis=0)
 
-        if tmp[0] > result[0]:
-            result = tmp
+        last_clusters = nearest_clusters
 
-    return result[1]
+    return clusters
