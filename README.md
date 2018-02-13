@@ -20,7 +20,15 @@ However, this didn't seem good enough, because now the algorithm has to run for 
 
 ![k-medians k = 9](https://i.imgur.com/ly2OGuj.png)
 
-The end result is about 60.15 for k = 5 and 67.13 for k = 9 on the VOC 2007 data set.
+The end result is about 60.15 for k = 5 and 67.13 for k = 9 on the VOC 2007 data set. If you run the algorithm multiple times, the avg IoU can be higher. I got a few times for example 60.5 for k = 5. The result always depends on the chosen starting points during initialization.
+
+## Usage
+
+To try out the results yourself, download the annotations here: http://host.robots.ox.ac.uk/pascal/VOC/voc2007/. Then change the constant ANNOTATIONS_PATH in test/test_voc2007.py and finally run:
+
+```
+python3 -m unittest discover -s tests/
+```
 
 ## References
 
