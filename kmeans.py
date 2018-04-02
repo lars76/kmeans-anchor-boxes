@@ -42,7 +42,7 @@ def translate_boxes(boxes):
     for row in range(new_boxes.shape[0]):
         new_boxes[row][2] = np.abs(new_boxes[row][2] - new_boxes[row][0])
         new_boxes[row][3] = np.abs(new_boxes[row][3] - new_boxes[row][1])
-    return np.delete(boxes, [0, 1], axis=1)
+    return np.delete(new_boxes, [0, 1], axis=1)
 
 
 def kmeans(boxes, k, dist=np.median):
