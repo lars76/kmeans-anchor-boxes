@@ -17,10 +17,13 @@ def load_dataset(path):
 		width = int(tree.findtext("./size/width"))
 
 		for obj in tree.iter("object"):
-			xmin = int(obj.findtext("bndbox/xmin")) / width
-			ymin = int(obj.findtext("bndbox/ymin")) / height
-			xmax = int(obj.findtext("bndbox/xmax")) / width
-			ymax = int(obj.findtext("bndbox/ymax")) / height
+			xmin = int(obj.findtext("bndbox/xmin"))*1.0 / width
+			ymin = int(obj.findtext("bndbox/ymin"))*1.0 / height
+			xmax = int(obj.findtext("bndbox/xmax"))*1.0 / width
+			ymax = int(obj.findtext("bndbox/ymax"))*1.0 / height
+			if xmin==xmax or ymin==ymax:
+				print("you need to check {}".format(xml_file))
+				continue
 
 			dataset.append([xmax - xmin, ymax - ymin])
 
